@@ -6,6 +6,7 @@ import { HashRouter } from 'react-router-dom'; // hash路由
 import { renderRoutes } from 'react-router-config'; // 读取路由配置并转化Route标签，但是只能渲染第一层路由
 import store from './store/index';
 import { Provider } from 'react-redux'; // 所以容器的能够访问到store
+import { Data } from './application/Singers/cache-data';
 
 
 function App() {
@@ -15,7 +16,9 @@ function App() {
       <HashRouter>
         <GlobalStyle></GlobalStyle>
         <IconStyle></IconStyle>
-        { renderRoutes(routes) }
+        <Data>
+          { renderRoutes(routes) }
+        </Data>
         {/* <i className="iconfont">&#xe62b;</i> */}
       </HashRouter>
     </Provider>

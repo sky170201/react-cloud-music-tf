@@ -50,7 +50,7 @@ function LevelItem(props) {
   })
   return (
     <Scroll direction={"horizontal"}>
-        <div>
+        {/* <div> */}
             <List ref={CategoryRef}>
                 <span>{title}</span>
                 {
@@ -63,7 +63,7 @@ function LevelItem(props) {
                     })
                 }
             </List>
-        </div>
+        {/* </div> */}
     </Scroll >
   )
 }

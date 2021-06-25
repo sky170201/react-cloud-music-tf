@@ -10,14 +10,15 @@ import { forceCheck } from "react-lazyload"; // 引入
 import Loading from "baseUI/loading/index";
 
 function Recommend(props) {
+    console.log(props, 123)
     const { bannerList, recommendList, enterLoading } = props; // 参数
     useEffect(() => {
         const { getBannerList, getRecommendList } = props;
 //         redux 数据缓存
 // - 此时先从推荐页面切换到歌手页面，在切换回来的话，通过`network`看到网络请求两次，这是属于性能浪费
 // - 所以我们利用redux的数据进行页面缓存来达到性能优化,第一次请求接口,有数据后就不请求了
-        if(bannerList.size==0) getBannerList();
-        if(recommendList.size==0) getRecommendList();
+        if(bannerList.size===0) getBannerList();
+        if(recommendList.size===0) getRecommendList();
     }, [])
     const bannerListJS = bannerList ? bannerList.toJS() : [];
     const recommendListJS = recommendList ? recommendList.toJS() : [];

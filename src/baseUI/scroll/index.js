@@ -32,7 +32,7 @@ const ScrollContainer = styled.div`
     overflow:hidden;
 `;
 /**
- * forwardRef
+ * forwardRef: 给函数式组件包装一下，就可以在父组件用ref获取到该函数式组件的内容
  * props:父组件传递的props
  * ref：父组件传递的ref，希望在封装组件时，外层组件通过ref直接控制内存组件或元素的行为
  */
@@ -79,6 +79,7 @@ const Scroll = forwardRef((props, ref) => {
     if (!bScroll || !pullUp) return;
     bScroll.on('scrollEnd', () => {
       // 判断是否滑到了底部
+      console.log('bScroll', bScroll)
       if (bScroll.y <= bScroll.maxScroll  +  100) {
         pullUpDebounce()
       }
@@ -93,6 +94,7 @@ const Scroll = forwardRef((props, ref) => {
     if (!bScroll || !pullDown) return;
     bScroll.on("touchEnd", (pos) => {
         // 判断用户是否下拉
+        console.log('pos', pos)
         if (pos.y > 50) {
           pullDownDebounce()
         }

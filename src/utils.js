@@ -43,3 +43,13 @@ export const filterIdx = name => {
     return null;
   }
 }
+
+// 拼接歌手字符串
+export const getName = list => {
+  let str = "";
+  list.map((item, index) => {
+    str += index === 0 ? item.name : "/" + item.name;
+    return item
+  })
+  return str
+}

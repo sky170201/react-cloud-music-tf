@@ -220,3 +220,5 @@ export const RankTypes = {
     "31": "Beatport全球电子舞曲榜",
     "32": "云音乐ACG游戏榜",
 };
+
+export const HEADER_HEIGHT = 45;

@@ -4,6 +4,7 @@ import Home from '../application/Home'; // 首页
 import Recommend from '../application/Recommend'; // 推荐
 import Singers from '../application/Singers'; // 歌手
 import Rank from '../application/Rank'; // 排行榜
+import Album from '../application/Album'; // 歌单详情页
 
 export default [
   {
@@ -19,7 +20,13 @@ export default [
       },
       {
         path: '/recommend',
-        component: Recommend // 推荐
+        component: Recommend, // 推荐
+          routes:[
+            {
+              path:"/recommend/:id",
+              component:Album
+            }
+          ]
       },
       {
           path: "/singers",

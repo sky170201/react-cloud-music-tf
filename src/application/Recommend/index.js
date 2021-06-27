@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from './store/actionCreators'; // 所有的派发方法
 import { forceCheck } from "react-lazyload"; // 引入
 import Loading from "baseUI/loading/index";
+import { renderRoutes } from "react-router-config";
 
 function Recommend(props) {
     console.log(props, 123)
@@ -31,6 +32,7 @@ function Recommend(props) {
                 </div>
             </Scroll>
             {enterLoading && <Loading></Loading>}
+            {renderRoutes(props.route.routes)}
         </Content>
     )
 }

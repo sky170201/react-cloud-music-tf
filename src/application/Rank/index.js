@@ -16,18 +16,20 @@ function Rank(props) {
         if (!rankList.length) {//性能优化，避免多次调用
             getRankListDispatch()
         }
-    },[]);
+    },[getRankListDispatch, rankList.length]);
     let globalStartIndex = filterIndex(rankList);//根据tracks进行区分
     let officialList = rankList.slice(0, globalStartIndex);//前半段的数据数据官方榜
     let globalList = rankList.slice(globalStartIndex);//后半段的数据属于全球榜
 
     //查找是否有对应的编号
-    let enterDetail = (name) => {
-        const idx = filterIdx(name);
+    let enterDetail = (detail) => {
+        console.log(detail)
+        const idx = filterIdx(detail.name);
         if (idx === null) {
             alert("暂无相关的数据");
             return;
         }
+        props.history.push(`/rank/${detail.id}`);
     }
 
     // 渲染歌曲列表
@@ -51,7 +53,7 @@ function Rank(props) {
                 {
                     list.map(item => {
                         return (
-                            <ListItem key={item.coverImgId} tracks={item.tracks} onClick={() => enterDetail(item.name)}>
+                            <ListItem key={item.coverImgId} tracks={item.tracks} onClick={() => enterDetail(item)}>
                                 <div className="img_wrapper">
                                     <img src={item.coverImgUrl} alt="rank-image" />
                                     <div className="decorate"></div>

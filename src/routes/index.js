@@ -34,7 +34,13 @@ export default [
       },
       {
           path: "/rank",
-          component: Rank //排行榜
+          component: Rank, //排行榜
+          routes: [
+            {
+              path: "/rank/:id",
+              component: Album
+            }
+          ]
       }
     ]
   }

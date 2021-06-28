@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Container, TopDesc, Menu, SongList, SongItem } from "./style";
 import { CSSTransition } from 'react-transition-group';
 import Header from "baseUI/header";
@@ -6,13 +6,17 @@ import Scroll from "baseUI/scroll/index";
 import { getCount, getName } from 'utils';
 import { HEADER_HEIGHT } from "api/config";
 import style from "assets/global-style";
+import { connect } from 'react-redux';
+import { changeEnterLoading, getAlbumList } from "./store/actionCreators";
+import {isEmptyObject} from 'utils';
+import Loading from 'baseUI/loading/index';
 
 function Album(props) {
-     const [title, setTitle] = useState("");//title文本内容
- const [isMarquee, setIsMarquee] = useState(false);//跑马灯
- const headerEl = useRef();//获取header组件的元素
+    const [title, setTitle] = useState("");//title文本内容
+    const [isMarquee, setIsMarquee] = useState(false);//跑马灯
+    const headerEl = useRef();//获取header组件的元素
     // 关于滑动组件和跑马灯的处理
-    const handleScroll = (pos) => {
+    const handleScroll = useCallback((pos) => {
         // pos为滑动时的坐标
         console.log(pos)
         let minScrollY = -HEADER_HEIGHT;//默认顶部的高度(最小)
@@ -30,92 +34,19 @@ function Album(props) {
             setTitle("")
             setIsMarquee(false)
         }
-    }
+    })
     const [showStatus, setShowStatus] = useState(true);
-    const handleBack = () => {
+    const handleBack = useCallback(() => {
         setShowStatus(false);
-    }
-    const currentAlbum = {
-        creator: {
-            avatarUrl: "http://p1.music.126.net/O9zV6jeawR43pfiK2JaVSw==/109951164232128905.jpg",
-            nickname: "你好世界!",
-        },
-        coverImgUrl: "http://p2.music.126.net/ecpXnH13-0QWpWQmqlR0gw==/109951164354856816.jpg",
-        subscribedCount: 2010711,
-        name: "明天是个好天气，来得及去观赏，好风景!",
-        tracks: [
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }, { name: "海棠" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }, { name: "海棠" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }, { name: "海棠" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }, { name: "海棠" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }, { name: "海棠" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }, { name: "海棠" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-            {
-                name: "大鱼",
-                ar: [{ name: "周深" }, { name: "海棠" }],
-                al: {
-                    name: "大鱼海棠"
-                }
-            },
-        ]
-    }
+    }, [])
+    const id = props.match.params.id;
+    const { currentAlbum: currentAlbumImmutable, enterLoading } = props;
+    const { getAlbumDataDispatch } = props;
+    useEffect(() => {
+        getAlbumDataDispatch(id);
+    }, [getAlbumDataDispatch, id])
+  
+    let currentAlbum = currentAlbumImmutable.toJS();
     // 顶部栏
     const renderTopDesc = () => {
         return (
@@ -198,16 +129,36 @@ function Album(props) {
             onExited={props.history.goBack}>
             <Container>
                 <Header title={title} handleClick={handleBack} ref={headerEl} isMarquee={isMarquee}></Header>
-                <Scroll bounceTop={false} onScroll={handleScroll}>
-                    <div>
-                        {renderTopDesc()}
-                        {renderMenu()}
-                        {renderSongList()}
-                    </div>
-                </Scroll>
+                {
+
+                    !isEmptyObject(currentAlbum) && <Scroll bounceTop={false} onScroll={handleScroll}>
+                        <div>
+                            {renderTopDesc()}
+                            {renderMenu()}
+                            {renderSongList()}
+                        </div>
+                    </Scroll>
+                }
+                { enterLoading && <Loading></Loading>}
             </Container>
         </CSSTransition>
     )
 }
 
-export default React.memo(Album);
+// 映射Redux全局的state到组件的props上
+const mapStateToProps = state => ({
+    currentAlbum: state.getIn(["album", "currentAlbum"]),
+    enterLoading: state.getIn(["album", "enterLoading"]),
+})
+
+// 映射dispatch到props上
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getAlbumDataDispatch(id) {
+            dispatch(changeEnterLoading(true));
+            dispatch(getAlbumList(id));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Album));

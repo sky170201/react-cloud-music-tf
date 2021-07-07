@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import Loading from "baseUI/loading/index";
 import LazyLoad, { forceCheck } from "react-lazyload";
 import { CHANGE_CATEGORY, CHANGE_ALPHA, CategoryDataContext, Data } from "./cache-data";
+import { renderRoutes } from 'react-router-config';
 
 function Singers(props) {
     const { singerList, enterLoading, pullUpLoading, pullDownLoading, pageCount } = props;//从仓库中获取数据
@@ -33,7 +34,10 @@ function Singers(props) {
     //初始化页面--热门歌手渲染页面
     useEffect(() => {
         if (singerList.size===0) getHotSingerDispatch()
-    }, [])
+    }, [getHotSingerDispatch, singerList.size]);
+    const enterDetail = (id) => {
+        props.history.push(`/singers/${id}`);
+    }
     //渲染歌手列表
     const renderSingerList = () => {
         const singerListJS = singerList ? singerList.toJS() : [];
@@ -42,7 +46,7 @@ function Singers(props) {
             {
                 singerListJS.map((item, index) => {
                     return (
-                        <ListItem key={item.accountId + "" + index}>
+                        <ListItem key={item.accountId + "" + index} onClick={(e) => enterDetail(item.id)}>
                             <div className="img_wrapper">
                               <LazyLoad placeholder={<img src="https://markdownit-images.oss-cn-beijing.aliyuncs.com/music/singer.png" width="100%" height="100%" alt="singers-music" />}>
                             <img src={`${item.picUrl}?param=300x300`} width="100%" height="100%" alt="singers-music" />
@@ -65,31 +69,34 @@ function Singers(props) {
     pullDownRefreshDispatch(category, alpha);
     }
     return (
-        <Data>
-            <NavContainer>
-                <LevelItem
-                    list={categoryTypes}
-                    title={"分类(默认热门):"}
-                    handleClick={val => handleUpdateCategory(val)}
-                    oldVal={category}></LevelItem>
-                <LevelItem
-                    list={alphaTypes}
-                    title={"首字母:"}
-                    handleClick={val => handleUpdateAlpha(val)}
-                    oldVal={alpha}></LevelItem>
-                <ListContainer>
-                    <Scroll
-                    pullUp={handlePullUp}
-                    pullDown={handlePullDown}
-                    pullUpLoading={pullUpLoading}
-                    pullDownLoading={pullDownLoading}
-                    onScroll={forceCheck}>
-                        {renderSingerList()}
-                    </Scroll>
-                    <Loading show={enterLoading}></Loading>
-                </ListContainer>
-            </NavContainer>
-        </Data>
+        <>
+            <Data>
+                <NavContainer>
+                    <LevelItem
+                        list={categoryTypes}
+                        title={"分类(默认热门):"}
+                        handleClick={val => handleUpdateCategory(val)}
+                        oldVal={category}></LevelItem>
+                    <LevelItem
+                        list={alphaTypes}
+                        title={"首字母:"}
+                        handleClick={val => handleUpdateAlpha(val)}
+                        oldVal={alpha}></LevelItem>
+                    <ListContainer>
+                        <Scroll
+                        pullUp={handlePullUp}
+                        pullDown={handlePullDown}
+                        pullUpLoading={pullUpLoading}
+                        pullDownLoading={pullDownLoading}
+                        onScroll={forceCheck}>
+                            {renderSingerList()}
+                        </Scroll>
+                        <Loading show={enterLoading}></Loading>
+                    </ListContainer>
+                </NavContainer>
+            </Data>
+            {renderRoutes(props.route.routes)}
+        </>
     )
 }
 

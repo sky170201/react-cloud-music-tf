@@ -5,6 +5,7 @@ import Recommend from '../application/Recommend'; // 推荐
 import Singers from '../application/Singers'; // 歌手
 import Rank from '../application/Rank'; // 排行榜
 import Album from '../application/Album'; // 歌单详情页
+import Singer from '../application/Singer';
 
 export default [
   {
@@ -30,7 +31,13 @@ export default [
       },
       {
           path: "/singers",
-          component: Singers //歌手
+          component: Singers, //歌手
+          routes: [
+            {
+              path: '/singers/:id',
+              component: Singer
+            }
+          ]
       },
       {
           path: "/rank",

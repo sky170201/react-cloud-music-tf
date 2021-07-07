@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { changeEnterLoading, getAlbumList } from "./store/actionCreators";
 import {isEmptyObject} from 'utils';
 import Loading from 'baseUI/loading/index';
+import SongsList from '../SongsList';
 
 function Album(props) {
     const [title, setTitle] = useState("");//title文本内容
@@ -135,7 +136,12 @@ function Album(props) {
                         <div>
                             {renderTopDesc()}
                             {renderMenu()}
-                            {renderSongList()}
+                            <SongsList
+                                songs={currentAlbum.tracks}
+                                collectCount={currentAlbum.subscribedCount}
+                                showCollect={true}
+                                showBackground={true}
+                            />
                         </div>
                     </Scroll>
                 }

@@ -16,7 +16,7 @@ function Singer(props) {
     setShowStatus(false);
   }, []);
   const musicNoteRef = useRef()
-    const musicAnimation = (x, y) => {
+  const musicAnimation = (x, y) => {
     musicNoteRef.current.startAnimation({ x, y })
   }
   const collectButton = useRef(); // 收藏按钮
@@ -42,7 +42,7 @@ function Singer(props) {
       // 遮罩放在下面，来包住歌曲
       layer.current.style.top = `${offsetHeight - OFFSET}px`;
       songScroll.current.refresh();
-    })
+    }, [getSingerDataDispatch, props.match.params.id])
 
     const handleScroll = useCallback(pos => {
         let height = initialHeight.current;//图片初始化高度
@@ -122,7 +122,8 @@ function Singer(props) {
 
 // 映射Redux全局的state到组件的props上
 const mapStateToProps = (state) => ({
-    artist: state.getIn(['singerInfo', 'artist']),songs: state.getIn(["singerInfo", "songsOfArtist"]),
+    artist: state.getIn(['singerInfo', 'artist']),
+    songs: state.getIn(["singerInfo", "songsOfArtist"]),
     loading: state.getIn(['singerInfo', 'loading']),
 })
 
@@ -131,7 +132,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getSingerDataDispatch(id) {
             dispatch(changeEnterLoading(true))
-           dispatch(getSingerInfo(id))
+            dispatch(getSingerInfo(id))
         }
     }
 }

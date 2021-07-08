@@ -14,3 +14,5 @@ export const SET_PALY_MODE = 'player/SET_PLAY_MODE';
 export const SET_CURRENT_INDEX = 'player/SET_CURRENT_INDEX';
 //设置显示播放列表
 export const SET_SHOW_PLAYLIST = 'player/SET_SHOW_PLAYLIST';
+//删除歌曲
+export const DELETE_SONG="player/DELETE_SONG";

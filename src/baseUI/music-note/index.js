@@ -52,7 +52,7 @@ const MusicNote = forwardRef((props, ref) => {
           icon.style[transform] = 'translate3d(0,0,0)';
       }, false);
     })
-  })
+  }, [transform])
 
   // 下落icon的动画效果
   const startAnimation = ({ x, y }) => {

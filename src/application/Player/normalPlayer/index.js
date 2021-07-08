@@ -10,6 +10,7 @@ function NormalPlayer(props) {
     const { song, fullScreen,playing, percent, duration, currentTime, mode } = props;
     // 给菜单绑定上一曲和下一曲事件处理函数
     const { toggleFullScreen,clickPlaying, onProgressChange, handlePrev, handleNext, changeMode } = props;
+    const {togglePlayList} = props;
     // 歌曲模式改变之后的按钮图标变化
     const getPlayMode = () => {
         let content;
@@ -149,7 +150,7 @@ function NormalPlayer(props) {
                         <div className="icon i-right" onClick={handleNext}>
                             <i className="iconfont">&#xe718;</i>
                         </div>
-                        <div className="icon i-right">
+                        <div className="icon i-right" onClick={() => togglePlayList (true)}>
                             <i className="iconfont">&#xe640;</i>
                         </div>
                     </Operators>

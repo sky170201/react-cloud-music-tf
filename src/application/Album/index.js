@@ -11,11 +11,17 @@ import { changeEnterLoading, getAlbumList } from "./store/actionCreators";
 import {isEmptyObject} from 'utils';
 import Loading from 'baseUI/loading/index';
 import SongsList from '../SongsList';
+import MusicNote from "baseUI/music-note/index";
 
 function Album(props) {
     const [title, setTitle] = useState("");//title文本内容
     const [isMarquee, setIsMarquee] = useState(false);//跑马灯
     const headerEl = useRef();//获取header组件的元素
+    const musicNoteRef = useRef()
+    const musicAnimation = (x, y) => {
+        console.log(x, y, musicNoteRef)
+        musicNoteRef.current.startAnimation({ x, y })
+    }
     // 关于滑动组件和跑马灯的处理
     const handleScroll = useCallback((pos) => {
         // pos为滑动时的坐标
@@ -141,11 +147,13 @@ function Album(props) {
                                 collectCount={currentAlbum.subscribedCount}
                                 showCollect={true}
                                 showBackground={true}
+                                musicAnimation={musicAnimation}
                             />
                         </div>
                     </Scroll>
                 }
                 { enterLoading && <Loading></Loading>}
+                <MusicNote ref={musicNoteRef}></MusicNote>
             </Container>
         </CSSTransition>
     )

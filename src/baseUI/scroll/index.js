@@ -41,8 +41,8 @@ const Scroll = forwardRef((props, ref) => {
   const scrollContainerRef = useRef(); // 获取scroll实例需要的DOM元素
   const { direction, click, refresh, bounceTop, bounceBottom } = props;
   const { pullUp, pullDown, onScroll } = props;
-  const pullUpDebounce = useMemo(() =>  debounce(pullUp, 300), []);
-  const pullDownDebounce = useMemo(() => debounce(pullDown, 300), []);
+  const pullUpDebounce = useMemo(() =>  debounce(pullUp, 300), [pullUp]);
+  const pullDownDebounce = useMemo(() => debounce(pullDown, 300), [pullDown]);
   const {pullUpLoading,pullDownLoading } = props;
   const PullUpDisplayStyle = {display:pullUpLoading?'':'none'};
   const PullDownDisplayStyle ={display:pullDownLoading?'':'none'};
@@ -61,7 +61,7 @@ const Scroll = forwardRef((props, ref) => {
     return () => {
       setBScroll(null)
     }
-  }, []);
+  }, [bounceBottom, bounceTop, click, direction]);
 
   // 给实例绑定scroll事件
   useEffect(() => {
@@ -87,7 +87,7 @@ const Scroll = forwardRef((props, ref) => {
     return () => {
       bScroll.off('scrollEnd')
     }
-  }, [pullUp, bScroll])
+  }, [pullUp, bScroll, pullUpDebounce])
 
   // 进行下拉的刷新，调用下拉刷新的函数
   useEffect(() => {
@@ -102,7 +102,7 @@ const Scroll = forwardRef((props, ref) => {
     return () => {
         bScroll.off("touchEnd")
     }
-  }, [pullDown, bScroll])
+  }, [pullDown, bScroll, pullDownDebounce])
 
   // 每次重新渲染都需要刷新实例，防止无法滑动
   useEffect(() => {

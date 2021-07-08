@@ -8,17 +8,19 @@ const SongsList = React.forwardRef((props, refs) => {
   const { collectCount, showCollect, songs } = props;
   const { changeCurrentIndexDispatch, changePlayListDispatch, changeSequencePlayListDispatch,togglePlayingDispatch } = props;
   const { musicAnimation } = props;
-  const totalCount = songs.length;
+  const totalCount = songs && songs.length;
   const selectItem = (e, index) => {
+    console.log('songList', index )
     changePlayListDispatch(songs);
     changeSequencePlayListDispatch(songs);
     changeCurrentIndexDispatch(index);
-    musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY)
+    musicAnimation && musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY)
     togglePlayingDispatch(true);
   };
 
   let songList = (list) => {
     let res = [];
+    console.log(list)
     for (let i = 0; i < list.length; i++) {
       let item = list[i];
       res.push(

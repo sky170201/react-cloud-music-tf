@@ -12,6 +12,7 @@ import { renderRoutes } from "react-router-config";
 
 function Recommend(props) {
     console.log(props, 123)
+    const { songCount } = props;
     const { bannerList, recommendList, enterLoading } = props; // 参数
     useEffect(() => {
         const { getBannerList, getRecommendList } = props;
@@ -20,11 +21,11 @@ function Recommend(props) {
 // - 所以我们利用redux的数据进行页面缓存来达到性能优化,第一次请求接口,有数据后就不请求了
         if(bannerList.size===0) getBannerList();
         if(recommendList.size===0) getRecommendList();
-    }, [])
+    }, [bannerList.size, props, recommendList.size])
     const bannerListJS = bannerList ? bannerList.toJS() : [];
     const recommendListJS = recommendList ? recommendList.toJS() : [];
     return (
-        <Content>
+        <Content play={songCount}>
             <Scroll className="list" onScroll={forceCheck}>
                 <div> {/*这个div必须保留，否则Scroll组件无法工作*/}
                     <Slider bannerList={bannerListJS}></Slider>
@@ -42,7 +43,8 @@ const mapStateToProps = (state) => ({
     // 获取相应的数据
     bannerList: state.getIn(["recommend", "bannerList"]),
     recommendList: state.getIn(["recommend", "recommendList"]),
-    enterLoading: state.getIn(["recommend", "enterLoading"])
+    enterLoading: state.getIn(["recommend", "enterLoading"]),
+    songCount: state.getIn(['player', 'playList']).size
 })
 
 // 将ui组件包装成容器组件

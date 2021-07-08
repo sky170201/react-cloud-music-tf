@@ -47,7 +47,7 @@ function LevelItem(props) {
       totalWidth += ele.offsetWidth;
     })
     categoryDOM.style.width = `${totalWidth}px`;//获取到内容宽度
-  })
+  }, [])
   return (
     <Scroll direction={"horizontal"}>
         {/* <div> */}
